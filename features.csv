@@ -1,19 +1,51 @@
-Feature ID,Feature Name,Category,Priority,Description
-F001,User Registration & Login,Authentication,High,Allow customers and staff to sign up and log in using email and password.
-F002,Role-Based Access Control,Authentication,High,Separate permissions for customers, restaurant admins, and staff.
-F003,Menu Browsing,Customer Experience,High,Let users browse restaurant menus with categories, images, prices, and availability.
-F004,Menu Search & Filters,Customer Experience,High,Search menu items by name and filter by category, dietary preference, or price.
-F005,Item Details & Customization,Customer Experience,High,Show ingredients, add-ons, spice levels, and special instructions for each item.
-F006,Cart System,Ordering,High,Allow users to add, update, remove, and review items before checkout.
-F007,Checkout & Place Order,Ordering,High,Collect delivery or pickup details and submit the final order.
-F008,Payment Integration,Payment,High,Support secure online payment methods for completed orders.
-F009,Invoice Generation,Payment,Medium,Generate downloadable invoices or receipts for each successful order.
-F010,Real-Time Order Tracking,Ordering,High,Show live order status from received to preparing, ready, out for delivery, or completed.
-F011,Order History & Reorder,Customer Experience,Medium,Let users view previous orders and quickly reorder favorite meals.
-F012,Restaurant Admin Dashboard,Admin,High,Provide an operational dashboard for restaurant owners and managers.
-F013,Menu Management,Admin,High,Allow admins to add, edit, disable, and organize menu items and categories.
-F014,Order Management Panel,Admin,High,Let staff update order status, manage queues, and handle fulfillment.
-F015,Restaurant Profile Management,Admin,Medium,Manage branch details, timings, service areas, and supported order modes.
-F016,Notifications,Customer Experience,Medium,Send order confirmation, status updates, and cancellation alerts.
-F017,Responsive Mobile UI,UI/UX,High,Ensure the ordering flow works smoothly on phones, tablets, and desktops.
-F018,Multi-Venue Support,Platform,Medium,Support restaurants, cafes, and cloud kitchens with the same ordering workflow.
+Feature ID,Feature Name,Category,Priority,Description,,,,,
+F001,User Registration & Login,Authentication,High,Allow users to sign up and log in using email/password or OAuth (Google/Facebook),,,,,
+F002,JWT Authentication,Authentication,High,Secure token-based session management for API calls,,,,,
+F003,Password Reset via Email,Authentication,Medium,Send OTP or reset link to registered email for password recovery,,,,,
+F004,Role-Based Access Control,Authentication,High,Separate permissions for Admin, Staff, and Customer roles,,,
+F005,Movie Listings Page,Movies,High,Display all currently showing and upcoming movies with poster and details,,,,,
+F006,Movie Search & Filter,Movies,High,Search by title, genre, language, rating, or release date,
+F007,Movie Detail Page,Movies,High,Show synopsis, cast, trailer, duration, language, and ratings
+F008,Movie Ratings & Reviews,Movies,Medium,Let users rate and write reviews for watched movies,,,,,
+F009,Trending & Featured Movies,Movies,Low,Highlight popular or editor-picked movies on the homepage,,,,,
+F010,Trailer Embed (YouTube),Movies,Low,Embed official trailers on the movie detail page,,,,,
+F011,Theater / Screen Management,Theater,High,Admin can add and manage theaters, screens, and their seating layouts,,,
+F012,Seat Map & Visual Selection,Booking,High,Interactive seat map showing available, booked, and selected seats,,,
+F013,Seat Categories (VIP/Regular),Booking,Medium,Support multiple seat tiers with different pricing per category,,,,,
+F014,Show Scheduling,Booking,High,Admin can schedule shows with date, time, screen, and movie assignment,,
+F015,Multiple Show Timings,Booking,High,Display all available show slots for a selected movie and date,,,,,
+F016,Booking Flow (Step-by-Step),Booking,High,Guided flow: select movie -> date -> show -> seats -> confirm,,,,,
+F017,Booking Summary Page,Booking,High,Show selected seats, pricing breakdown, and total before payment,,,
+F018,Booking Confirmation & QR Code,Booking,High,Generate a unique booking ID and downloadable QR-code ticket,,,,,
+F019,Booking History,Booking,High,Users can view all past and upcoming bookings in their profile,,,,,
+F020,Booking Cancellation,Booking,Medium,Allow users to cancel bookings within a configurable window with refund policy,,,,,
+F021,Payment Simulation,Payment,High,Simulate card or UPI payment with success/failure states,,,,,
+F022,Payment Gateway Integration,Payment,Medium,Integrate real gateway such as Stripe or Razorpay for live transactions,,,,,
+F023,Coupon / Promo Code Support,Payment,Medium,Apply discount codes at checkout with validation and usage limits,,,,,
+F024,Invoice / Receipt Download,Payment,Medium,Generate PDF receipt for each successful booking,,,,,
+F025,Refund Processing,Payment,Medium,Automatically or manually trigger refunds for cancelled bookings,,,,,
+F026,Admin Dashboard,Admin,High,Overview panel showing revenue, bookings, occupancy, and top movies,,
+F027,Movie CRUD (Admin),Admin,High,Admin can add, edit, and delete movies with full metadata,,,
+F028,Show CRUD (Admin),Admin,High,Admin can create, update, and remove scheduled shows,,,
+F029,Seat Layout Editor (Admin),Admin,Medium,Visual tool for admins to define rows, columns, and seat categories per screen,,,
+F030,Booking Reports & Export,Admin,Medium,Generate and export booking reports as CSV or PDF for a date range,,,,,
+F031,User Management (Admin),Admin,Medium,Admin can view, activate, deactivate, or delete user accounts,,
+F032,Notification Center,Notifications,Medium,In-app notification bell for booking updates and promotions,,,,,
+F033,Email Confirmation,Notifications,High,Send booking confirmation and cancellation emails automatically,,,,,
+F034,SMS / WhatsApp Alerts,Notifications,Low,Send ticket details and reminders via SMS or WhatsApp,,,,,
+F035,Push Notifications,Notifications,Low,Browser or mobile push alerts for show reminders and offers,,,,,
+F036,Responsive Mobile UI,UI/UX,High,Fully responsive design optimized for mobile and tablet screens,,,,,
+F037,Dark Mode,UI/UX,Low,Toggle between light and dark themes,,,,,
+F038,Multi-Language Support,UI/UX,Low,Internationalization (i18n) for regional language support,,,,,
+F039,Accessibility (WCAG 2.1),UI/UX,Medium,Keyboard navigation, ARIA labels, and screen-reader support,,,
+F040,Loading Skeletons & Animations,UI/UX,Low,Smooth skeleton screens and micro-animations for better UX,,,,,
+F041,Food & Beverage Add-Ons,Extras,Low,Allow users to pre-order snacks and drinks with their ticket,,,,,
+F042,Loyalty / Rewards Program,Extras,Low,Earn points per booking redeemable for discounts on future tickets,,,,,
+F043,Group / Bulk Booking,Extras,Medium,Book multiple seats in one transaction for groups with a single payment,,,,,
+F044,Gift Cards,Extras,Low,Purchase and redeem digital gift cards for ticket payments,,,,,
+F045,Waitlist for Sold-Out Shows,Extras,Low,Users can join a waitlist and get notified if seats become available,,,,,
+F046,Recommendation Engine,Extras,Low,Suggest movies based on user watch history and preferences,,,,,
+F047,Social Sharing,Extras,Low,Share bookings or movie pages on social media platforms,,,,,
+F048,Live Seat Availability (WebSocket),Performance,Medium,Real-time seat lock and release during active booking sessions,,,,,
+F049,Rate Limiting & Throttling,Security,High,Prevent abuse and DDoS on booking and payment endpoints,,,,,
+F050,Audit Logs,Security,Medium,Track all admin actions with timestamp and user details for accountability,,,,,
