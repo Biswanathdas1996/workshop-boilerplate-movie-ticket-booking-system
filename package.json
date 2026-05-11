@@ -1,0 +1,23 @@
+{
+  "name": "movie-ticket-booking-system",
+  "version": "1.0.0",
+  "description": "Movie ticket booking system with React frontend and FastAPI backend",
+  "private": true,
+  "scripts": {
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.48.0"
+  },
+  "keywords": [
+    "movie",
+    "booking",
+    "react",
+    "fastapi",
+    "e2e",
+    "playwright"
+  ]
+}
