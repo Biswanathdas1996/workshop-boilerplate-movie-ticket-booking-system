@@ -1,84 +1,103 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { Layout } from './components/Layout'
+import { Login } from './pages/Login'
+import { Register } from './pages/Register'
+import { Movies } from './pages/Movies'
+import { MovieDetail } from './pages/MovieDetail'
+import { Booking } from './pages/Booking'
+import { AdminDashboard } from './pages/AdminDashboard'
+import { useAuthStore } from './store/authStore'
+import './i18n/config'
+import './styles.css'
 
-type HealthResponse = {
-  frontend: string
-  backend: string
-  database: string
-  databaseName?: string | null
-}
+function PrivateRoute({ children, requireAdmin = false }: { children: React.ReactNode; requireAdmin?: boolean }) {
+  const { isAuthenticated, user } = useAuthStore()
 
-const defaultHealth: HealthResponse = {
-  frontend: 'active',
-  backend: 'connected',
-  database: 'connected',
-  databaseName: null,
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />
+  }
+
+  if (requireAdmin && user?.role !== 'admin') {
+    return <Navigate to="/" replace />
+  }
+
+  return <>{children}</>
 }
 
 function App() {
-  const [health, setHealth] = useState<HealthResponse>(defaultHealth)
-  const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading')
-
-  const statusLabel = status === 'ready' ? 'Operational' : status === 'loading' ? 'Checking' : 'Attention'
+  const { user } = useAuthStore()
 
   useEffect(() => {
-    const loadHealth = async () => {
-      try {
-        const response = await fetch('/api/health')
-        if (!response.ok) {
-          throw new Error('Health request failed')
-        }
-
-        const data = (await response.json()) as HealthResponse
-        setHealth({ ...defaultHealth, ...data })
-        setStatus('ready')
-      } catch {
-        setHealth({
-          frontend: 'active',
-          backend: 'disconnected',
-          database: 'disconnected',
-          databaseName: null,
-        })
-        setStatus('error')
-      }
-    }
-
-    void loadHealth()
-  }, [])
+    // KAN-415: Dark Mode Theme Toggle - Apply theme on load
+    const theme = user?.theme || 'light'
+    document.documentElement.setAttribute('data-theme', theme)
+  }, [user?.theme])
 
   return (
-    <main className="page">
-      <section className="hero">
-        <p className="eyebrow">Starter Environment</p>
-        <h1>Boilerplate Dashboard</h1>
-        <p className="subtitle">React frontend, Python backend, and database wiring at a glance.</p>
-      </section>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
 
-      <section className="panel">
-        <div className="panel-head">
-          <h2>System Health</h2>
-          <span className={`status-badge status-${status}`}>{statusLabel}</span>
-        </div>
+        <Route
+          path="/"
+          element={
+            <Layout>
+              <div className="home-page">
+                <h1>Welcome to MovieTicket</h1>
+                <p>Your one-stop destination for booking movie tickets</p>
+                <a href="/movies" className="btn btn-primary btn-large">
+                  Browse Movies
+                </a>
+              </div>
+            </Layout>
+          }
+        />
 
-        <div className="health-grid">
-          <article className="health-card">
-            <p className="label">Frontend</p>
-            <p className="value">{health.frontend}</p>
-          </article>
+        <Route
+          path="/movies"
+          element={
+            <Layout>
+              <Movies />
+            </Layout>
+          }
+        />
 
-          <article className="health-card">
-            <p className="label">Backend</p>
-            <p className="value">{health.backend}</p>
-          </article>
+        <Route
+          path="/movies/:id"
+          element={
+            <Layout>
+              <MovieDetail />
+            </Layout>
+          }
+        />
 
-          <article className="health-card">
-            <p className="label">Database</p>
-            <p className="value">{health.database}</p>
-          </article>
-        </div>
+        <Route
+          path="/booking/:showId"
+          element={
+            <PrivateRoute>
+              <Layout>
+                <Booking />
+              </Layout>
+            </PrivateRoute>
+          }
+        />
 
-        <p className="db-meta">{health.databaseName ? `Connected DB: ${health.databaseName}` : 'Connected DB: not set'}</p>
-      </section>
-    </main>
+        <Route
+          path="/admin"
+          element={
+            <PrivateRoute requireAdmin>
+              <Layout>
+                <AdminDashboard />
+              </Layout>
+            </PrivateRoute>
+          }
+        />
+
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
