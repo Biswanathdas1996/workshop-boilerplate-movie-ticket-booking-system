@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate, Link } from 'react-router-dom'
 import { Layout } from './components/Layout'
 import { Login } from './pages/Login'
 import { Register } from './pages/Register'
@@ -45,11 +45,37 @@ function App() {
           element={
             <Layout>
               <div className="home-page">
-                <h1>Welcome to MovieTicket</h1>
-                <p>Your one-stop destination for booking movie tickets</p>
-                <a href="/movies" className="btn btn-primary btn-large">
-                  Browse Movies
-                </a>
+                <section className="home-hero">
+                  <p className="hero-kicker">Cinema Night, Upgraded</p>
+                  <h1>Book your next blockbuster in seconds</h1>
+                  <p>
+                    Discover trending releases, lock premium seats, and check out instantly with a smoother movie
+                    ticket experience.
+                  </p>
+                  <div className="home-hero-actions">
+                    <Link to="/movies" className="btn btn-primary btn-large">
+                      Browse Movies
+                    </Link>
+                    <Link to="/register" className="btn btn-secondary btn-large">
+                      Create Account
+                    </Link>
+                  </div>
+                </section>
+
+                <section className="home-feature-grid" aria-label="Platform highlights">
+                  <article className="home-feature-card">
+                    <h2>Real-Time Seat Map</h2>
+                    <p>Pick exactly where you want to sit with live availability and category-based pricing.</p>
+                  </article>
+                  <article className="home-feature-card">
+                    <h2>Smart Discovery</h2>
+                    <p>Filter by genre and language, then jump straight into featured and trending picks.</p>
+                  </article>
+                  <article className="home-feature-card">
+                    <h2>Fast Checkout</h2>
+                    <p>Apply promo codes, review totals clearly, and complete bookings without friction.</p>
+                  </article>
+                </section>
               </div>
             </Layout>
           }

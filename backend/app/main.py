@@ -17,7 +17,7 @@ from slowapi.errors import RateLimitExceeded
 
 from .models import *
 from .auth import *
-from .database import get_database, init_indexes
+from .database import get_database, init_indexes, seed_dummy_movies
 from .utils import *
 from .rate_limiter import get_limiter
 
@@ -51,6 +51,9 @@ app.add_middleware(
 @app.on_event("startup")
 async def startup_event():
     init_indexes()
+    inserted = seed_dummy_movies()
+    if inserted:
+        print(f"Seeded {inserted} dummy movies.")
 
 
 # Health Check

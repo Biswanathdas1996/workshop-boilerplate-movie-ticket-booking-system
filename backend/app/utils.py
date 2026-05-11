@@ -40,6 +40,7 @@ def generate_receipt_pdf(booking_data: Dict[str, Any]) -> bytes:
     # Booking details
     p.setFont("Helvetica", 12)
     y_position = height - 150
+    seat_labels = [f"{s['row']}{s['number']}" for s in booking_data.get('seats', [])]
 
     details = [
         f"Booking ID: {booking_data.get('id', 'N/A')}",
@@ -48,7 +49,7 @@ def generate_receipt_pdf(booking_data: Dict[str, Any]) -> bytes:
         f"Screen: {booking_data.get('screen_name', 'N/A')}",
         f"Date: {booking_data.get('show_date', 'N/A')}",
         f"Time: {booking_data.get('show_time', 'N/A')}",
-        f"Seats: {', '.join([f\"{s['row']}{s['number']}\" for s in booking_data.get('seats', [])])}",
+        f"Seats: {', '.join(seat_labels)}",
         f"Total Amount: ${booking_data.get('final_amount', 0):.2f}",
     ]
 

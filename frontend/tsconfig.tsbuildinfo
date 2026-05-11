@@ -1,1 +1,1 @@
-{"root":["./src/app.tsx","./src/main.tsx","./src/vite-env.d.ts"],"version":"5.9.3"}
+{"root":["./src/app.tsx","./src/main.tsx","./src/vite-env.d.ts","./src/components/layout.tsx","./src/components/loadingskeleton.tsx","./src/i18n/config.ts","./src/lib/api.ts","./src/pages/admindashboard.tsx","./src/pages/booking.tsx","./src/pages/login.tsx","./src/pages/moviedetail.tsx","./src/pages/movies.tsx","./src/pages/register.tsx","./src/store/authstore.ts"],"version":"5.9.3"}
