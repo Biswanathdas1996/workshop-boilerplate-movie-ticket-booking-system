@@ -120,6 +120,16 @@ export default function MovieDetailPage() {
                 {movie.cast.join(', ')}
               </p>
             </div>
+
+            <div className="movie-detail-actions">
+              {shows.length > 0 ? (
+                <a href="#shows" className="btn btn-primary">
+                  🎟 Book Now
+                </a>
+              ) : (
+                <span className="status-badge badge-muted">No shows available</span>
+              )}
+            </div>
           </div>
         </div>
 
@@ -138,7 +148,7 @@ export default function MovieDetailPage() {
         )}
       </section>
 
-      <section className="panel">
+      <section className="panel" id="shows">
         <h2 className="section-title">Available shows</h2>
 
         {shows.length === 0 ? (

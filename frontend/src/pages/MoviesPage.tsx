@@ -144,32 +144,41 @@ export default function MoviesPage() {
         ) : (
           <div className="movie-grid">
             {movies.map((movie) => (
-              <Link
-                to={`/movies/${movie.id}`}
-                key={movie.id}
-                className="movie-card"
-                aria-label={`View details for ${movie.title}`}
-              >
-                <img
-                  src={movie.poster_url}
-                  alt={`${movie.title} poster`}
-                  className="movie-card-image"
-                  loading="lazy"
-                />
-                <div className="movie-card-content">
-                  <h3 className="movie-card-title">{movie.title}</h3>
-                  <p className="movie-card-info">
-                    ⭐ {movie.rating}/10 • {movie.duration_minutes} min • {movie.language}
-                  </p>
-                  <div className="genre-tags" role="list" aria-label="Genres">
-                    {movie.genre.slice(0, 3).map((g) => (
-                      <span key={g} className="genre-tag" role="listitem">
-                        {g}
-                      </span>
-                    ))}
+              <div key={movie.id} className="movie-card">
+                <Link
+                  to={`/movies/${movie.id}`}
+                  className="movie-card-inner"
+                  aria-label={`View details for ${movie.title}`}
+                >
+                  <img
+                    src={movie.poster_url}
+                    alt={`${movie.title} poster`}
+                    className="movie-card-image"
+                    loading="lazy"
+                  />
+                  <div className="movie-card-content">
+                    <h3 className="movie-card-title">{movie.title}</h3>
+                    <p className="movie-card-info">
+                      ⭐ {movie.rating}/10 • {movie.duration_minutes} min • {movie.language}
+                    </p>
+                    <div className="genre-tags" role="list" aria-label="Genres">
+                      {movie.genre.slice(0, 3).map((g) => (
+                        <span key={g} className="genre-tag" role="listitem">
+                          {g}
+                        </span>
+                      ))}
+                    </div>
                   </div>
+                </Link>
+                <div className="movie-card-actions">
+                  <Link
+                    to={`/movies/${movie.id}#shows`}
+                    className="btn btn-primary movie-card-book-btn"
+                  >
+                    🎟 Book Now
+                  </Link>
                 </div>
-              </Link>
+              </div>
             ))}
           </div>
         )}

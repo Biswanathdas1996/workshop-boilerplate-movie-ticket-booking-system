@@ -1,4 +1,4 @@
-"""Insert sample movies into MongoDB.
+"""Insert sample movies, theaters, screens, shows and seats into MongoDB.
 
 Run from the backend folder with the venv active:
 
@@ -7,7 +7,7 @@ Run from the backend folder with the venv active:
 Requires MONGODB_URI in the environment (same as Uvicorn), e.g. from repo-root .env.
 """
 
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -82,22 +82,165 @@ DUMMY_MOVIES = [
     },
 ]
 
+DUMMY_THEATERS = [
+    {
+        "name": "CineMax Downtown",
+        "location": "Downtown",
+        "city": "New York",
+        "address": "123 Main St, New York, NY 10001",
+    },
+    {
+        "name": "Galaxy Cinemas",
+        "location": "Westside",
+        "city": "Los Angeles",
+        "address": "456 Sunset Blvd, Los Angeles, CA 90028",
+    },
+]
+
+# Show time slots relative to "today" (seeding date)
+SHOW_OFFSETS_HOURS = [10, 14, 18, 21]  # 10am, 2pm, 6pm, 9pm
+TICKET_PRICES = [12.50, 14.00]
+
 
 def main() -> None:
     db = get_database()
     now = datetime.now(UTC)
-    added = 0
-    skipped = 0
 
+    # ── Movies ────────────────────────────────────────────────────────────────
+    movie_added = movie_skipped = 0
     for doc in DUMMY_MOVIES:
         if db.movies.find_one({"title": doc["title"]}) is not None:
-            skipped += 1
+            movie_skipped += 1
             continue
         db.movies.insert_one({**doc, "created_at": now, "is_active": True})
-        added += 1
+        movie_added += 1
+    print(f"Movies  → inserted {movie_added}, skipped {movie_skipped} (already existed).")
 
-    print(f"Inserted {added} movies, skipped {skipped} (titles already existed).")
+    # ── Theaters & Screens ────────────────────────────────────────────────────
+    theater_ids = []
+    screen_ids = []
+    screen_layouts = []
+
+    for t in DUMMY_THEATERS:
+        existing = db.theaters.find_one({"name": t["name"]})
+        if existing:
+            theater_id = str(existing["_id"])
+        else:
+            result = db.theaters.insert_one({**t, "created_at": now})
+            theater_id = str(result.inserted_id)
+        theater_ids.append(theater_id)
+
+        # One screen per theater
+        existing_screen = db.screens.find_one({"theater_id": theater_id})
+        rows, cols = 8, 12
+        layout = {"rows": rows, "columns": cols, "aisles": []}
+        total = rows * cols
+        if existing_screen:
+            screen_id = str(existing_screen["_id"])
+            layout = existing_screen.get("seat_layout", layout)
+        else:
+            result = db.screens.insert_one({
+                "theater_id": theater_id,
+                "name": "Screen 1",
+                "total_seats": total,
+                "seat_layout": layout,
+                "created_at": now,
+            })
+            screen_id = str(result.inserted_id)
+
+        screen_ids.append(screen_id)
+        screen_layouts.append(layout)
+
+    print(f"Theaters → {len(theater_ids)} ready.  Screens → {len(screen_ids)} ready.")
+
+    # ── Shows ─────────────────────────────────────────────────────────────────
+    movies = list(db.movies.find({}))
+    base_date = now.replace(hour=0, minute=0, second=0, microsecond=0)
+
+    # Build the full set of shows we want
+    desired_shows = []
+    for i, movie in enumerate(movies):
+        movie_id = str(movie["_id"])
+        duration = movie.get("duration_minutes", 120)
+        for day_offset in range(7):
+            for slot_hour in SHOW_OFFSETS_HOURS:
+                t_idx = (i + day_offset) % len(theater_ids)
+                start_time = base_date + timedelta(days=day_offset, hours=slot_hour)
+                desired_shows.append({
+                    "movie_id": movie_id,
+                    "duration": duration,
+                    "start_time": start_time,
+                    "t_idx": t_idx,
+                })
+
+    # Fetch existing (movie_id, screen_id, start_time) combos in one query
+    existing_shows = db.shows.find(
+        {},
+        {"movie_id": 1, "screen_id": 1, "start_time": 1}
+    )
+    existing_keys = {
+        (s["movie_id"], s["screen_id"], s["start_time"])
+        for s in existing_shows
+    }
+
+    shows_to_insert = []
+    for s in desired_shows:
+        t_idx = s["t_idx"]
+        screen_id = screen_ids[t_idx]
+        key = (s["movie_id"], screen_id, s["start_time"])
+        if key in existing_keys:
+            continue
+        shows_to_insert.append({
+            "movie_id": s["movie_id"],
+            "screen_id": screen_id,
+            "theater_id": theater_ids[t_idx],
+            "start_time": s["start_time"],
+            "end_time": s["start_time"] + timedelta(minutes=s["duration"]),
+            "price": TICKET_PRICES[t_idx % len(TICKET_PRICES)],
+            "created_at": now,
+        })
+
+    if shows_to_insert:
+        result = db.shows.insert_many(shows_to_insert)
+        inserted_show_ids = [str(oid) for oid in result.inserted_ids]
+    else:
+        inserted_show_ids = []
+
+    print(f"Shows   → inserted {len(shows_to_insert)}, skipped {len(desired_shows) - len(shows_to_insert)} (already existed).")
+
+    # ── Seats ─────────────────────────────────────────────────────────────────
+    # Find which of the newly inserted shows already have seats (safety check)
+    existing_seat_show_ids = set(
+        s["show_id"] for s in db.seats.find(
+            {"show_id": {"$in": inserted_show_ids}},
+            {"show_id": 1}
+        )
+    )
+
+    all_seats = []
+    for show_doc, show_id in zip(shows_to_insert, inserted_show_ids):
+        if show_id in existing_seat_show_ids:
+            continue
+        t_idx = theater_ids.index(show_doc["theater_id"])
+        layout = screen_layouts[t_idx]
+        rows = layout.get("rows", 8)
+        cols = layout.get("columns", 12)
+        for row_num in range(rows):
+            row_letter = chr(65 + row_num)
+            for col_num in range(1, cols + 1):
+                all_seats.append({
+                    "show_id": show_id,
+                    "row": row_letter,
+                    "number": col_num,
+                    "status": "available",
+                })
+
+    if all_seats:
+        db.seats.insert_many(all_seats, ordered=False)
+
+    print(f"Seats   → inserted {len(all_seats)} total.")
 
 
 if __name__ == "__main__":
     main()
+
