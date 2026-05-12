@@ -12,15 +12,33 @@ ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 1440  # 24 hours
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+MAX_BCRYPT_PASSWORD_BYTES = 72
+
+
+def _truncate_to_bcrypt_limit(password: str) -> str:
+    """Truncate a string so its UTF-8 encoded form is at most 72 bytes.
+
+    Bcrypt only accepts passwords up to 72 bytes; cut the UTF-8 byte
+    sequence and decode ignoring incomplete trailing bytes so the same
+    truncation can be applied consistently on verify.
+    """
+    if not isinstance(password, str):
+        password = str(password)
+    b = password.encode("utf-8")
+    if len(b) <= MAX_BCRYPT_PASSWORD_BYTES:
+        return password
+    return b[:MAX_BCRYPT_PASSWORD_BYTES].decode("utf-8", "ignore")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    return pwd_context.verify(plain_password, hashed_password)
+    safe = _truncate_to_bcrypt_limit(plain_password)
+    return pwd_context.verify(safe, hashed_password)
 
 
 def get_password_hash(password: str) -> str:
-    return pwd_context.hash(password)
+    safe = _truncate_to_bcrypt_limit(password)
+    return pwd_context.hash(safe)
 
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:

@@ -21,8 +21,8 @@ if not exist "%ROOT%frontend\node_modules" (
   exit /b 1
 )
 
-start "Boilerplate Backend" cmd /k "cd /d ""%ROOT%backend"" && ""%ROOT%backend\.venv\Scripts\python.exe"" -m uvicorn app.main:app --reload --host 127.0.0.1 --port %BACKEND_PORT%"
-start "Boilerplate Frontend" cmd /k "cd /d ""%ROOT%frontend"" && npm run dev -- --host 127.0.0.1 --port %FRONTEND_PORT%"
+start "Boilerplate Backend" /D "%ROOT%backend" cmd /k ""%ROOT%backend\.venv\Scripts\python.exe" -m uvicorn app.main:app --reload --host 127.0.0.1 --port %BACKEND_PORT%"
+start "Boilerplate Frontend" /D "%ROOT%frontend" cmd /k "npm run dev -- --host 127.0.0.1 --port %FRONTEND_PORT%"
 
 echo Started frontend on port %FRONTEND_PORT% and backend on port %BACKEND_PORT%.
 endlocal
