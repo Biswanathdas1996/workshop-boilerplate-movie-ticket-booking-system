@@ -1,0 +1,32 @@
+{
+  "name": "movie-booking-e2e-tests",
+  "version": "1.0.0",
+  "description": "End-to-end automation tests for Movie Ticket Booking System",
+  "type": "module",
+  "scripts": {
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:headed": "playwright test --headed",
+    "test:chrome": "playwright test --project=chromium",
+    "test:firefox": "playwright test --project=firefox",
+    "test:webkit": "playwright test --project=webkit",
+    "test:debug": "playwright test --debug",
+    "test:report": "playwright show-report",
+    "test:auth": "playwright test auth.spec.ts",
+    "test:movies": "playwright test movies.spec.ts",
+    "test:booking": "playwright test booking-flow.spec.ts",
+    "test:admin": "playwright test admin.spec.ts",
+    "test:a11y": "playwright test accessibility-security.spec.ts"
+  },
+  "keywords": [
+    "playwright",
+    "e2e",
+    "testing",
+    "automation"
+  ],
+  "devDependencies": {
+    "@playwright/test": "^1.48.0",
+    "@types/node": "^22.0.0",
+    "typescript": "^5.7.3"
+  }
+}
