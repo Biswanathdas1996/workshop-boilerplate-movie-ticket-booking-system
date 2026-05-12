@@ -53,33 +53,50 @@ export default function BookingsPage() {
   return (
     <main className="page">
       <section className="hero">
-        <h1>My Bookings</h1>
-        <p className="subtitle">View your past and upcoming movie reservations</p>
+        <p className="eyebrow">Reservations</p>
+        <h1>My bookings</h1>
+        <p className="subtitle">View upcoming and past showtimes at a glance.</p>
       </section>
 
       <section className="panel">
-        <div style={{ marginBottom: '1.5rem', display: 'flex', gap: '1rem' }}>
+        <div
+          className="segmented-control"
+          role="tablist"
+          aria-label="Filter bookings by status"
+        >
           <button
+            type="button"
+            role="tab"
+            aria-selected={filter === 'all'}
             onClick={() => setFilter('all')}
-            className={`btn ${filter === 'all' ? 'btn-primary' : 'btn-secondary'}`}
+            className={`segmented-control__btn${filter === 'all' ? ' is-active' : ''}`}
           >
             All
           </button>
           <button
+            type="button"
+            role="tab"
+            aria-selected={filter === 'confirmed'}
             onClick={() => setFilter('confirmed')}
-            className={`btn ${filter === 'confirmed' ? 'btn-primary' : 'btn-secondary'}`}
+            className={`segmented-control__btn${filter === 'confirmed' ? ' is-active' : ''}`}
           >
             Confirmed
           </button>
           <button
+            type="button"
+            role="tab"
+            aria-selected={filter === 'pending'}
             onClick={() => setFilter('pending')}
-            className={`btn ${filter === 'pending' ? 'btn-primary' : 'btn-secondary'}`}
+            className={`segmented-control__btn${filter === 'pending' ? ' is-active' : ''}`}
           >
             Pending
           </button>
           <button
+            type="button"
+            role="tab"
+            aria-selected={filter === 'cancelled'}
             onClick={() => setFilter('cancelled')}
-            className={`btn ${filter === 'cancelled' ? 'btn-primary' : 'btn-secondary'}`}
+            className={`segmented-control__btn${filter === 'cancelled' ? ' is-active' : ''}`}
           >
             Cancelled
           </button>
@@ -94,8 +111,8 @@ export default function BookingsPage() {
             <div className="empty-state-icon" aria-hidden="true">🎫</div>
             <h3>No bookings found</h3>
             <p>Start booking your favorite movies!</p>
-            <Link to="/movies" className="btn btn-primary" style={{ marginTop: '1rem' }}>
-              Browse Movies
+            <Link to="/movies" className="btn btn-primary empty-state-actions">
+              Browse movies
             </Link>
           </div>
         ) : (
@@ -133,13 +150,12 @@ export default function BookingsPage() {
                         {booking.status}
                       </span>
                     </td>
-                    <td>
+                    <td className="table-actions">
                       <Link
                         to={`/bookings/${booking.id}`}
-                        className="btn btn-secondary"
-                        style={{ padding: '0.5rem 1rem', fontSize: '0.9rem' }}
+                        className="btn btn-secondary btn-sm"
                       >
-                        View Details
+                        Details
                       </Link>
                     </td>
                   </tr>

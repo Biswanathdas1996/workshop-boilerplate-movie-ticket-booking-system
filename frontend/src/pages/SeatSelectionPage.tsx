@@ -108,8 +108,18 @@ export default function SeatSelectionPage() {
   return (
     <main className="page">
       <section className="panel">
-        <h1 style={{ marginBottom: '1rem' }}>Select Your Seats</h1>
-        <p className="subtitle">Show time: {new Date(show.start_time).toLocaleString()}</p>
+        <header>
+          <h1 className="page-heading">Select your seats</h1>
+          <p className="subtitle">
+            {new Date(show.start_time).toLocaleString(undefined, {
+              weekday: 'long',
+              month: 'short',
+              day: 'numeric',
+              hour: 'numeric',
+              minute: '2-digit',
+            })}
+          </p>
+        </header>
 
         <div className="screen" role="img" aria-label="Screen">
           SCREEN THIS WAY
@@ -150,49 +160,54 @@ export default function SeatSelectionPage() {
             ))}
         </div>
 
-        <div style={{ display: 'flex', gap: '2rem', justifyContent: 'center', marginTop: '2rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <div className="seat seat-available" aria-hidden="true"></div>
-            <span>Available</span>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <div className="seat seat-selected" aria-hidden="true"></div>
-            <span>Selected</span>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <div className="seat seat-booked" aria-hidden="true"></div>
-            <span>Booked</span>
-          </div>
+        <div className="seat-legend" aria-label="Seat legend">
+          <span className="seat-legend__item">
+            <span className="seat seat-available" aria-hidden="true"></span>
+            Available
+          </span>
+          <span className="seat-legend__item">
+            <span className="seat seat-selected" aria-hidden="true"></span>
+            Selected
+          </span>
+          <span className="seat-legend__item">
+            <span className="seat seat-booked" aria-hidden="true"></span>
+            Booked
+          </span>
         </div>
       </section>
 
-      <section className="panel booking-summary">
-        <h2 style={{ marginBottom: '1rem' }}>Booking Summary</h2>
+      <section className="panel">
+        <h2 className="summary-block__title">Booking summary</h2>
 
         {selectedSeats.length > 0 ? (
           <>
-            <p style={{ marginBottom: '0.5rem' }}>
-              <strong>Selected Seats:</strong>{' '}
-              {selectedSeats.map((s) => `${s.row}${s.number}`).join(', ')}
-            </p>
-            <p style={{ marginBottom: '0.5rem' }}>
-              <strong>Number of Seats:</strong> {selectedSeats.length}
-            </p>
-            <p style={{ marginBottom: '1.5rem', fontSize: '1.2rem', fontWeight: 700 }}>
-              <strong>Total Amount:</strong> ${totalAmount.toFixed(2)}
-            </p>
+            <div className="summary-rows summary-rows--spaced">
+              <div className="summary-row">
+                <span className="summary-row__label">Seats</span>
+                <span className="summary-row__value">
+                  {selectedSeats.map((s) => `${s.row}${s.number}`).join(', ')}
+                </span>
+              </div>
+              <div className="summary-row">
+                <span className="summary-row__label">Quantity</span>
+                <span className="summary-row__value">{selectedSeats.length}</span>
+              </div>
+              <div className="summary-row summary-row--total">
+                <span className="summary-row__label">Total</span>
+                <span className="summary-row__value">${totalAmount.toFixed(2)}</span>
+              </div>
+            </div>
 
             <button
               onClick={handleBooking}
               disabled={booking}
-              className="btn btn-primary"
-              style={{ width: '100%' }}
+              className="btn btn-primary btn-block"
             >
-              {booking ? 'Processing...' : 'Continue to Payment'}
+              {booking ? 'Processing...' : 'Continue to payment'}
             </button>
           </>
         ) : (
-          <p className="empty-state">Please select at least one seat</p>
+          <p className="empty-state empty-state--inline">Tap seats on the map to start your booking.</p>
         )}
       </section>
     </main>

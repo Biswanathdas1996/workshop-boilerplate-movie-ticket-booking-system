@@ -1,5 +1,15 @@
 const API_URL = '/api';
 
+/** Omits undefined/null/empty so URLSearchParams does not emit "key=undefined". */
+function buildQueryString(record: Record<string, string | undefined | null>): string {
+  const sp = new URLSearchParams();
+  for (const [key, value] of Object.entries(record)) {
+    if (value === undefined || value === null || value === '') continue;
+    sp.set(key, value);
+  }
+  return sp.toString();
+}
+
 class ApiClient {
   private getHeaders(includeAuth = true): HeadersInit {
     const headers: HeadersInit = {
@@ -94,13 +104,13 @@ export const authApi = {
 // Movies API
 export const moviesApi = {
   getAll: (params?: { query?: string; genre?: string; language?: string }) => {
-    const queryString = new URLSearchParams(params as any).toString();
-    return api.get(`/movies${queryString ? `?${queryString}` : ''}`, false);
+    const queryString = buildQueryString(params ?? {});
+    return api.get(`/movies/${queryString ? `?${queryString}` : ''}`, false);
   },
 
   getById: (id: string) => api.get(`/movies/${id}`, false),
 
-  create: (data: any) => api.post('/movies', data),
+  create: (data: any) => api.post('/movies/', data),
 
   update: (id: string, data: any) => api.put(`/movies/${id}`, data),
 
@@ -110,11 +120,11 @@ export const moviesApi = {
 // Theaters API
 export const theatersApi = {
   getAll: (city?: string) =>
-    api.get(`/theaters${city ? `?city=${city}` : ''}`, false),
+    api.get(`/theaters/${city ? `?city=${encodeURIComponent(city)}` : ''}`, false),
 
   getById: (id: string) => api.get(`/theaters/${id}`, false),
 
-  create: (data: any) => api.post('/theaters', data),
+  create: (data: any) => api.post('/theaters/', data),
 
   update: (id: string, data: any) => api.put(`/theaters/${id}`, data),
 
@@ -129,8 +139,8 @@ export const theatersApi = {
 // Shows API
 export const showsApi = {
   getAll: (params?: { movie_id?: string; theater_id?: string; city?: string; date?: string }) => {
-    const queryString = new URLSearchParams(params as any).toString();
-    return api.get(`/shows${queryString ? `?${queryString}` : ''}`, false);
+    const queryString = buildQueryString(params ?? {});
+    return api.get(`/shows/${queryString ? `?${queryString}` : ''}`, false);
   },
 
   getById: (id: string) => api.get(`/shows/${id}`, false),
@@ -140,17 +150,17 @@ export const showsApi = {
   holdSeats: (id: string, seatIds: string[]) =>
     api.post(`/shows/${id}/seats/hold`, seatIds),
 
-  create: (data: any) => api.post('/shows', data),
+  create: (data: any) => api.post('/shows/', data),
 
   delete: (id: string) => api.delete(`/shows/${id}`),
 };
 
 // Bookings API
 export const bookingsApi = {
-  create: (data: any) => api.post('/bookings', data),
+  create: (data: any) => api.post('/bookings/', data),
 
   getAll: (status?: string) =>
-    api.get(`/bookings${status ? `?status=${status}` : ''}`),
+    api.get(`/bookings/${status ? `?status=${encodeURIComponent(status)}` : ''}`),
 
   getById: (id: string) => api.get(`/bookings/${id}`),
 
@@ -161,7 +171,7 @@ export const bookingsApi = {
 
 // Payments API
 export const paymentsApi = {
-  process: (data: any) => api.post('/payments', data),
+  process: (data: any) => api.post('/payments/', data),
 
   getById: (id: string) => api.get(`/payments/${id}`),
 
@@ -188,9 +198,7 @@ export const adminApi = {
     api.get(`/admin/bookings${status ? `?status=${status}` : ''}`),
 
   getRevenue: (startDate?: string, endDate?: string) => {
-    const params = new URLSearchParams();
-    if (startDate) params.append('start_date', startDate);
-    if (endDate) params.append('end_date', endDate);
-    return api.get(`/admin/revenue?${params.toString()}`);
+    const qs = buildQueryString({ start_date: startDate, end_date: endDate });
+    return api.get(`/admin/revenue${qs ? `?${qs}` : ''}`);
   },
 };

@@ -31,9 +31,13 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="page">
-      <section className="panel" style={{ maxWidth: '500px', margin: '2rem auto' }}>
-        <h1 style={{ marginBottom: '1.5rem' }}>Login</h1>
+    <main className="page auth-page">
+      <section className="panel auth-panel">
+        <header className="auth-panel__intro">
+          <p className="eyebrow">Welcome back</p>
+          <h1 className="auth-panel__title">Sign in</h1>
+          <p className="auth-panel__lede">Continue to reservations, seating, and your digital ticket.</p>
+        </header>
 
         {error && (
           <div className="alert alert-error" role="alert">
@@ -74,29 +78,29 @@ export default function LoginPage() {
             />
           </div>
 
-          <button
-            type="submit"
-            className="btn btn-primary"
-            disabled={loading}
-            style={{ width: '100%', marginBottom: '1rem' }}
-          >
-            {loading ? 'Logging in...' : 'Login'}
-          </button>
+          <div className="btn-stack">
+            <button
+              type="submit"
+              className="btn btn-primary btn-block"
+              disabled={loading}
+            >
+              {loading ? 'Logging in...' : 'Login'}
+            </button>
 
-          <button
-            type="button"
-            onClick={handleGoogleLogin}
-            className="btn btn-secondary"
-            style={{ width: '100%' }}
-            aria-label="Sign in with Google"
-          >
-            🌐 Sign in with Google
-          </button>
+            <button
+              type="button"
+              onClick={handleGoogleLogin}
+              className="btn btn-secondary btn-block"
+              aria-label="Sign in with Google"
+            >
+              Continue with Google
+            </button>
+          </div>
         </form>
 
-        <p style={{ marginTop: '1.5rem', textAlign: 'center' }}>
-          Don't have an account?{' '}
-          <Link to="/register" style={{ color: 'var(--brand)', fontWeight: 600 }}>
+        <p className="form-footer">
+          Don&apos;t have an account?{' '}
+          <Link to="/register" className="link-accent">
             Register here
           </Link>
         </p>

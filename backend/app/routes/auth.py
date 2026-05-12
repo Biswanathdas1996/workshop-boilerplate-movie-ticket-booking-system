@@ -1,5 +1,5 @@
 from datetime import datetime
-from fastapi import APIRouter, HTTPException, status, Depends
+from fastapi import APIRouter, HTTPException, status, Depends, Request
 from fastapi.security import OAuth2PasswordRequestForm
 from ..models import UserCreate, UserLogin, User, Token, UserInDB
 from ..auth import (
@@ -18,7 +18,7 @@ router = APIRouter(prefix="/api/auth", tags=["Authentication"])
 
 @router.post("/register", response_model=User, status_code=status.HTTP_201_CREATED)
 @limiter.limit(AUTH_RATE_LIMIT)
-async def register(user: UserCreate, request):
+async def register(request: Request, user: UserCreate):
     """Register a new user"""
     db = get_database()
 
@@ -50,7 +50,7 @@ async def register(user: UserCreate, request):
 
 @router.post("/login", response_model=Token)
 @limiter.limit(AUTH_RATE_LIMIT)
-async def login(form_data: OAuth2PasswordRequestForm = Depends()):
+async def login(request: Request, form_data: OAuth2PasswordRequestForm = Depends()):
     """Login with email and password"""
     db = get_database()
 

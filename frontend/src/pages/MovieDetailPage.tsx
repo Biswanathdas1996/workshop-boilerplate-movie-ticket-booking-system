@@ -82,25 +82,23 @@ export default function MovieDetailPage() {
   return (
     <main className="page">
       <section className="panel">
-        <div style={{ display: 'grid', gap: '2rem', gridTemplateColumns: '1fr 2fr' }}>
+        <div className="movie-detail-layout">
           <img
             src={movie.poster_url}
             alt={`${movie.title} poster`}
-            style={{ width: '100%', borderRadius: '12px' }}
+            className="movie-detail-poster"
           />
 
           <div>
-            <h1 style={{ marginBottom: '1rem' }}>{movie.title}</h1>
+            <h1 className="movie-hero__title">{movie.title}</h1>
 
-            <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
-              <span className="status-badge status-ready">⭐ {movie.rating}/10</span>
-              <span className="status-badge status-loading">
-                {movie.duration_minutes} min
-              </span>
-              <span className="status-badge status-loading">{movie.language}</span>
+            <div className="movie-meta-row">
+              <span className="status-badge badge-rating">⭐ {movie.rating}/10</span>
+              <span className="status-badge badge-muted">{movie.duration_minutes} min</span>
+              <span className="status-badge badge-muted">{movie.language}</span>
             </div>
 
-            <div className="genre-tags" style={{ marginBottom: '1.5rem' }}>
+            <div className="genre-tags genre-tags--below-meta">
               {movie.genre.map((g) => (
                 <span key={g} className="genre-tag">
                   {g}
@@ -108,20 +106,26 @@ export default function MovieDetailPage() {
               ))}
             </div>
 
-            <p style={{ marginBottom: '1rem', lineHeight: 1.6 }}>{movie.description}</p>
+            <p className="movie-body">{movie.description}</p>
 
-            <p className="movie-card-info" style={{ marginBottom: '0.5rem' }}>
-              <strong>Director:</strong> {movie.director}
-            </p>
-            <p className="movie-card-info">
-              <strong>Cast:</strong> {movie.cast.join(', ')}
-            </p>
+            <div className="detail-stack">
+              <p className="movie-card-info">
+                <strong>Director</strong>
+                {' · '}
+                {movie.director}
+              </p>
+              <p className="movie-card-info">
+                <strong>Cast</strong>
+                {' · '}
+                {movie.cast.join(', ')}
+              </p>
+            </div>
           </div>
         </div>
 
         {movie.trailer_youtube_id && (
-          <div style={{ marginTop: '2rem' }}>
-            <h2 style={{ marginBottom: '1rem' }}>Official Trailer</h2>
+          <div className="section-block">
+            <h2 className="section-title">Official trailer</h2>
             <div className="video-container">
               <iframe
                 src={`https://www.youtube.com/embed/${movie.trailer_youtube_id}`}
@@ -135,7 +139,7 @@ export default function MovieDetailPage() {
       </section>
 
       <section className="panel">
-        <h2 style={{ marginBottom: '1.5rem' }}>Available Shows</h2>
+        <h2 className="section-title">Available shows</h2>
 
         {shows.length === 0 ? (
           <div className="empty-state">
@@ -161,8 +165,7 @@ export default function MovieDetailPage() {
                     <td>
                       <Link
                         to={`/booking/${show.id}`}
-                        className="btn btn-primary"
-                        style={{ padding: '0.5rem 1rem', fontSize: '0.9rem' }}
+                        className="btn btn-primary btn-sm"
                       >
                         Book Now
                       </Link>

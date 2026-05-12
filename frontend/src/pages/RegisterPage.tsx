@@ -27,9 +27,15 @@ export default function RegisterPage() {
   }
 
   return (
-    <main className="page">
-      <section className="panel" style={{ maxWidth: '500px', margin: '2rem auto' }}>
-        <h1 style={{ marginBottom: '1.5rem' }}>Create Account</h1>
+    <main className="page auth-page">
+      <section className="panel auth-panel">
+        <header className="auth-panel__intro">
+          <p className="eyebrow">New here</p>
+          <h1 className="auth-panel__title">Create your account</h1>
+          <p className="auth-panel__lede">
+            Unlock faster checkout and a single place to manage every booking.
+          </p>
+        </header>
 
         {error && (
           <div className="alert alert-error" role="alert">
@@ -85,24 +91,21 @@ export default function RegisterPage() {
               autoComplete="new-password"
               minLength={6}
             />
-            <small style={{ color: 'var(--muted)', fontSize: '0.85rem' }}>
-              Minimum 6 characters
-            </small>
+            <small className="form-hint">Minimum 6 characters</small>
           </div>
 
           <button
             type="submit"
-            className="btn btn-primary"
+            className="btn btn-primary btn-block"
             disabled={loading}
-            style={{ width: '100%' }}
           >
             {loading ? 'Creating Account...' : 'Register'}
           </button>
         </form>
 
-        <p style={{ marginTop: '1.5rem', textAlign: 'center' }}>
+        <p className="form-footer">
           Already have an account?{' '}
-          <Link to="/login" style={{ color: 'var(--brand)', fontWeight: 600 }}>
+          <Link to="/login" className="link-accent">
             Login here
           </Link>
         </p>

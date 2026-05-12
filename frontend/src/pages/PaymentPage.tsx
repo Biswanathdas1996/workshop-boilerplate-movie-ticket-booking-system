@@ -71,22 +71,44 @@ export default function PaymentPage() {
 
   return (
     <main className="page">
-      <section className="panel" style={{ maxWidth: '600px', margin: '0 auto' }}>
-        <h1 style={{ marginBottom: '1.5rem' }}>Payment</h1>
+      <section className="panel panel--narrow">
+        <header>
+          <h1 className="page-heading page-heading--tight">Checkout</h1>
+          <p className="subtitle">Review your reservation and confirm payment.</p>
+        </header>
 
-        <div className="alert alert-info" style={{ marginBottom: '1.5rem' }}>
-          This is a payment simulation. No real transaction will be processed.
+        <div className="alert alert-info alert-banner" role="status">
+          This is a payment simulation — no charges are processed.
         </div>
 
-        <div className="booking-summary" style={{ marginBottom: '2rem' }}>
-          <h2 style={{ marginBottom: '1rem' }}>Booking Summary</h2>
-          <p><strong>Movie:</strong> {booking.movie?.title}</p>
-          <p><strong>Theater:</strong> {booking.theater?.name}</p>
-          <p><strong>Show Time:</strong> {new Date(booking.show?.start_time).toLocaleString()}</p>
-          <p><strong>Seats:</strong> {booking.seats.map((s: any) => `${s.row}${s.number}`).join(', ')}</p>
-          <p style={{ fontSize: '1.2rem', fontWeight: 700, marginTop: '1rem' }}>
-            <strong>Total Amount:</strong> ${booking.total_amount.toFixed(2)}
-          </p>
+        <div className="summary-block">
+          <h2 className="summary-block__title">Order summary</h2>
+          <div className="summary-rows">
+            <div className="summary-row">
+              <span className="summary-row__label">Film</span>
+              <span className="summary-row__value">{booking.movie?.title}</span>
+            </div>
+            <div className="summary-row">
+              <span className="summary-row__label">Venue</span>
+              <span className="summary-row__value">{booking.theater?.name}</span>
+            </div>
+            <div className="summary-row">
+              <span className="summary-row__label">Showtime</span>
+              <span className="summary-row__value">
+                {new Date(booking.show?.start_time).toLocaleString()}
+              </span>
+            </div>
+            <div className="summary-row">
+              <span className="summary-row__label">Seats</span>
+              <span className="summary-row__value">
+                {booking.seats.map((s: any) => `${s.row}${s.number}`).join(', ')}
+              </span>
+            </div>
+            <div className="summary-row summary-row--total">
+              <span className="summary-row__label">Total due</span>
+              <span className="summary-row__value">${booking.total_amount.toFixed(2)}</span>
+            </div>
+          </div>
         </div>
 
         <form onSubmit={handlePayment} aria-label="Payment form">
@@ -142,9 +164,8 @@ export default function PaymentPage() {
 
           <button
             type="submit"
-            className="btn btn-primary"
+            className="btn btn-primary btn-block"
             disabled={processing}
-            style={{ width: '100%' }}
           >
             {processing ? 'Processing Payment...' : `Pay $${booking.total_amount.toFixed(2)}`}
           </button>

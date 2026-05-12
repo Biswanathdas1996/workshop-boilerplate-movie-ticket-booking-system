@@ -44,48 +44,91 @@ export default function MoviesPage() {
   return (
     <main className="page">
       <section className="hero">
-        <h1>Browse Movies</h1>
-        <p className="subtitle">Discover the latest releases and book your tickets</p>
+        <p className="eyebrow">Now showing</p>
+        <h1>Browse movies</h1>
+        <p className="subtitle">Search by title or narrow the list by genre and language.</p>
       </section>
 
       <section className="panel">
         <div className="search-bar">
-          <input
-            type="search"
-            placeholder="Search movies..."
-            className="form-input search-input"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            aria-label="Search movies"
-          />
+          <div className="search-bar__main">
+            <label className="sr-only" htmlFor="movie-search">
+              Search movies
+            </label>
+            <div className="search-bar__input-wrap">
+              <svg
+                className="search-bar__icon"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+              >
+                <path
+                  d="M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+                <path
+                  d="M16.5 16.5 21 21"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+              </svg>
+              <input
+                id="movie-search"
+                type="search"
+                placeholder="Search by title…"
+                className="form-input search-input search-bar__search-field"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                autoComplete="off"
+              />
+            </div>
+          </div>
 
-          <select
-            className="form-select filter-select"
-            value={selectedGenre}
-            onChange={(e) => setSelectedGenre(e.target.value)}
-            aria-label="Filter by genre"
-          >
-            <option value="">All Genres</option>
-            <option value="Action">Action</option>
-            <option value="Comedy">Comedy</option>
-            <option value="Drama">Drama</option>
-            <option value="Horror">Horror</option>
-            <option value="Sci-Fi">Sci-Fi</option>
-            <option value="Thriller">Thriller</option>
-          </select>
+          <div className="search-bar__filters" role="group" aria-label="Filter movies">
+            <div className="search-bar__field">
+              <label className="search-bar__label" htmlFor="movie-genre">
+                Genre
+              </label>
+              <select
+                id="movie-genre"
+                className="form-select filter-select search-bar__select"
+                value={selectedGenre}
+                onChange={(e) => setSelectedGenre(e.target.value)}
+              >
+                <option value="">All genres</option>
+                <option value="Action">Action</option>
+                <option value="Comedy">Comedy</option>
+                <option value="Drama">Drama</option>
+                <option value="Horror">Horror</option>
+                <option value="Sci-Fi">Sci-Fi</option>
+                <option value="Thriller">Thriller</option>
+              </select>
+            </div>
 
-          <select
-            className="form-select filter-select"
-            value={selectedLanguage}
-            onChange={(e) => setSelectedLanguage(e.target.value)}
-            aria-label="Filter by language"
-          >
-            <option value="">All Languages</option>
-            <option value="English">English</option>
-            <option value="Hindi">Hindi</option>
-            <option value="Tamil">Tamil</option>
-            <option value="Telugu">Telugu</option>
-          </select>
+            <div className="search-bar__field">
+              <label className="search-bar__label" htmlFor="movie-language">
+                Language
+              </label>
+              <select
+                id="movie-language"
+                className="form-select filter-select search-bar__select"
+                value={selectedLanguage}
+                onChange={(e) => setSelectedLanguage(e.target.value)}
+              >
+                <option value="">All languages</option>
+                <option value="English">English</option>
+                <option value="Hindi">Hindi</option>
+                <option value="Tamil">Tamil</option>
+                <option value="Telugu">Telugu</option>
+              </select>
+            </div>
+          </div>
         </div>
 
         {loading ? (

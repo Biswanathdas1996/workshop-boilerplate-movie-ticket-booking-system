@@ -32,33 +32,50 @@ export default function AdminDashboard() {
   return (
     <main className="page">
       <section className="hero">
-        <h1>Admin Dashboard</h1>
-        <p className="subtitle">Manage your movie booking system</p>
+        <p className="eyebrow">Operations</p>
+        <h1>Admin dashboard</h1>
+        <p className="subtitle">Monitor throughput, catalogs, and user access.</p>
       </section>
 
       <section className="panel">
-        <div style={{ marginBottom: '2rem', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+        <div
+          className="segmented-control"
+          role="tablist"
+          aria-label="Admin sections"
+        >
           <button
+            type="button"
+            role="tab"
+            aria-selected={activeTab === 'overview'}
             onClick={() => setActiveTab('overview')}
-            className={`btn ${activeTab === 'overview' ? 'btn-primary' : 'btn-secondary'}`}
+            className={`segmented-control__btn${activeTab === 'overview' ? ' is-active' : ''}`}
           >
             Overview
           </button>
           <button
+            type="button"
+            role="tab"
+            aria-selected={activeTab === 'movies'}
             onClick={() => setActiveTab('movies')}
-            className={`btn ${activeTab === 'movies' ? 'btn-primary' : 'btn-secondary'}`}
+            className={`segmented-control__btn${activeTab === 'movies' ? ' is-active' : ''}`}
           >
             Movies
           </button>
           <button
+            type="button"
+            role="tab"
+            aria-selected={activeTab === 'theaters'}
             onClick={() => setActiveTab('theaters')}
-            className={`btn ${activeTab === 'theaters' ? 'btn-primary' : 'btn-secondary'}`}
+            className={`segmented-control__btn${activeTab === 'theaters' ? ' is-active' : ''}`}
           >
             Theaters
           </button>
           <button
+            type="button"
+            role="tab"
+            aria-selected={activeTab === 'users'}
             onClick={() => setActiveTab('users')}
-            className={`btn ${activeTab === 'users' ? 'btn-primary' : 'btn-secondary'}`}
+            className={`segmented-control__btn${activeTab === 'users' ? ' is-active' : ''}`}
           >
             Users
           </button>
@@ -66,7 +83,7 @@ export default function AdminDashboard() {
 
         {activeTab === 'overview' && stats && (
           <>
-            <h2 style={{ marginBottom: '1.5rem' }}>System Overview</h2>
+            <h2 className="section-title">System overview</h2>
 
             <div className="dashboard-stats">
               <div className="stat-card">
@@ -102,7 +119,7 @@ export default function AdminDashboard() {
 
             {stats.popular_movies && stats.popular_movies.length > 0 && (
               <>
-                <h2 style={{ marginTop: '2rem', marginBottom: '1rem' }}>Popular Movies</h2>
+                <h2 className="section-title section-title--spaced">Popular movies</h2>
                 <div className="table-container">
                   <table className="data-table">
                     <thead>
@@ -167,9 +184,9 @@ function MovieManagement() {
 
   return (
     <>
-      <h2 style={{ marginBottom: '1.5rem' }}>Movie Management</h2>
+      <h2 className="section-title">Movie management</h2>
 
-      <p className="alert alert-info" style={{ marginBottom: '1.5rem' }}>
+      <p className="alert alert-info alert-banner">
         Use the API to create, update, and delete movies. Full CRUD interface coming soon.
       </p>
 
@@ -196,11 +213,10 @@ function MovieManagement() {
                   <td>{movie.genre.join(', ')}</td>
                   <td>{movie.rating}/10</td>
                   <td>{movie.language}</td>
-                  <td>
+                  <td className="table-actions">
                     <button
                       onClick={() => handleDelete(movie.id)}
-                      className="btn btn-danger"
-                      style={{ padding: '0.4rem 0.8rem', fontSize: '0.85rem' }}
+                      className="btn btn-danger btn-sm"
                     >
                       Delete
                     </button>
@@ -237,9 +253,9 @@ function TheaterManagement() {
 
   return (
     <>
-      <h2 style={{ marginBottom: '1.5rem' }}>Theater Management</h2>
+      <h2 className="section-title">Theater management</h2>
 
-      <p className="alert alert-info" style={{ marginBottom: '1.5rem' }}>
+      <p className="alert alert-info alert-banner">
         Use the API to create, update, and delete theaters and screens.
       </p>
 
@@ -313,7 +329,7 @@ function UserManagement() {
 
   return (
     <>
-      <h2 style={{ marginBottom: '1.5rem' }}>User Management</h2>
+      <h2 className="section-title">User management</h2>
 
       {loading ? (
         <div className="loading">
@@ -346,20 +362,18 @@ function UserManagement() {
                       {user.is_active ? 'Active' : 'Inactive'}
                     </span>
                   </td>
-                  <td>
+                  <td className="table-actions">
                     {user.is_active ? (
                       <button
                         onClick={() => handleDeactivate(user.id)}
-                        className="btn btn-danger"
-                        style={{ padding: '0.4rem 0.8rem', fontSize: '0.85rem' }}
+                        className="btn btn-danger btn-sm"
                       >
                         Deactivate
                       </button>
                     ) : (
                       <button
                         onClick={() => handleActivate(user.id)}
-                        className="btn btn-primary"
-                        style={{ padding: '0.4rem 0.8rem', fontSize: '0.85rem' }}
+                        className="btn btn-primary btn-sm"
                       >
                         Activate
                       </button>

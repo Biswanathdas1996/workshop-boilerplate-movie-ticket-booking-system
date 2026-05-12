@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Link, Navigate, useNavigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Link, Navigate } from 'react-router-dom'
 import { useState, useEffect, createContext, useContext } from 'react'
 import { authApi } from './api'
 
@@ -106,7 +106,8 @@ function Navbar() {
     <nav className="navbar" role="navigation" aria-label="Main navigation">
       <div className="navbar-content">
         <Link to="/" className="logo" aria-label="Home">
-          🎬 MovieTickets
+          <span className="logo-mark" aria-hidden="true">▶</span>
+          <span>MovieTickets</span>
         </Link>
 
         <ul className="nav-links">
@@ -139,37 +140,44 @@ function Navbar() {
 function HomePage() {
   return (
     <main className="page">
-      <section className="hero">
-        <p className="eyebrow" aria-label="Category">Movie Booking Platform</p>
-        <h1>Book Your Movie Tickets Online</h1>
-        <p className="subtitle">
-          Browse movies, select seats, and enjoy seamless booking with digital tickets and QR codes
+      <section className="hero hero--home">
+        <p className="eyebrow" aria-label="Category">
+          Movie Booking Platform
         </p>
-        <div style={{ marginTop: '1.5rem' }}>
+        <h1>Tickets in seconds, seats you actually want</h1>
+        <p className="subtitle">
+          Browse what&apos;s playing, lock your seats in real time, and walk in with a digital ticket—no queues, no guesswork.
+        </p>
+        <div className="hero-actions">
           <Link to="/movies" className="btn btn-primary" aria-label="Browse all movies">
-            Browse Movies
+            Browse movies
+          </Link>
+          <Link to="/register" className="btn btn-secondary" aria-label="Create an account">
+            Create account
           </Link>
         </div>
       </section>
 
       <section className="panel">
-        <h2>Features</h2>
-        <div className="movie-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))' }}>
-          <div className="health-card">
-            <p className="label">🎬 Browse Movies</p>
-            <p style={{ marginTop: '0.5rem', fontSize: '0.9rem' }}>Search and filter latest releases</p>
+        <div className="panel-head">
+          <h2>Built for tonight&apos;s showing</h2>
+        </div>
+        <div className="feature-grid">
+          <div className="feature-card">
+            <p className="label">Discover</p>
+            <p>Search and filters tuned for what&apos;s trending and what fits your vibe.</p>
           </div>
-          <div className="health-card">
-            <p className="label">🪑 Select Seats</p>
-            <p style={{ marginTop: '0.5rem', fontSize: '0.9rem' }}>Interactive seat selection</p>
+          <div className="feature-card">
+            <p className="label">Pick seats</p>
+            <p>Interactive hall map—see what&apos;s free before you commit.</p>
           </div>
-          <div className="health-card">
-            <p className="label">💳 Easy Payment</p>
-            <p style={{ marginTop: '0.5rem', fontSize: '0.9rem' }}>Secure payment simulation</p>
+          <div className="feature-card">
+            <p className="label">Pay securely</p>
+            <p>Fast checkout simulation with clear confirmations every step.</p>
           </div>
-          <div className="health-card">
-            <p className="label">📱 Digital Tickets</p>
-            <p style={{ marginTop: '0.5rem', fontSize: '0.9rem' }}>QR code tickets</p>
+          <div className="feature-card">
+            <p className="label">Go paperless</p>
+            <p>Digital confirmations with QR you can flash at the door.</p>
           </div>
         </div>
       </section>
@@ -231,6 +239,19 @@ function App() {
               }
             />
           </Routes>
+          <footer className="site-footer">
+            <div className="site-footer__inner">
+              <p className="site-footer__brand">
+                <span className="logo-mark site-footer__mark" aria-hidden="true">
+                  ▶
+                </span>
+                MovieTickets
+              </p>
+              <p className="site-footer__meta">
+                Workshop demo — browse, book, and pay in a cohesive cinema checkout flow.
+              </p>
+            </div>
+          </footer>
         </div>
       </AuthProvider>
     </BrowserRouter>
