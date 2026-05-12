@@ -1,6 +1,7 @@
 @echo off
 setlocal EnableExtensions
 set "ROOT=%~dp0"
+if "%ROOT:~-1%"=="\" set "ROOT=%ROOT:~0,-1%"
 pushd "%ROOT%"
 
 echo Installing backend dependencies...
@@ -16,14 +17,14 @@ if errorlevel 1 (
   exit /b 1
 )
 
-"%ROOT%backend\.venv\Scripts\python.exe" -m pip install --upgrade pip
+"%ROOT%\backend\.venv\Scripts\python.exe" -m pip install --upgrade pip
 if errorlevel 1 (
   echo Failed to upgrade pip.
   popd
   exit /b 1
 )
 
-"%ROOT%backend\.venv\Scripts\python.exe" -m pip install -r backend\requirements.txt
+"%ROOT%\backend\.venv\Scripts\python.exe" -m pip install -r backend\requirements.txt
 if errorlevel 1 (
   echo Failed to install backend requirements.
   popd
@@ -31,7 +32,7 @@ if errorlevel 1 (
 )
 
 echo Installing frontend dependencies...
-cd /d "%ROOT%frontend"
+cd /d "%ROOT%\frontend"
 npm install
 if errorlevel 1 (
   echo Failed to install frontend dependencies.
