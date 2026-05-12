@@ -1,6 +1,7 @@
 @echo off
 setlocal EnableExtensions EnableDelayedExpansion
 set "ROOT=%~dp0"
+if "%ROOT:~-1%"=="\" set "ROOT=%ROOT:~0,-1%"
 set "FRONTEND_PORT=5173"
 set "BACKEND_PORT=8000"
 
@@ -11,18 +12,18 @@ if exist "%ROOT%.env" (
   )
 )
 
-if not exist "%ROOT%backend\.venv\Scripts\python.exe" (
+if not exist "%ROOT%\backend\.venv\Scripts\python.exe" (
   echo Backend virtual environment not found. Run setup.bat first.
   exit /b 1
 )
 
-if not exist "%ROOT%frontend\node_modules" (
+if not exist "%ROOT%\frontend\node_modules" (
   echo Frontend dependencies not found. Run setup.bat first.
   exit /b 1
 )
 
-start "Boilerplate Backend" cmd /k "cd /d ""%ROOT%backend"" && ""%ROOT%backend\.venv\Scripts\python.exe"" -m uvicorn app.main:app --reload --host 127.0.0.1 --port %BACKEND_PORT%"
-start "Boilerplate Frontend" cmd /k "cd /d ""%ROOT%frontend"" && npm run dev -- --host 127.0.0.1 --port %FRONTEND_PORT%"
+start "Boilerplate Backend" cmd /k "cd /d "%ROOT%\backend" && "%ROOT%\backend\.venv\Scripts\python.exe" -m uvicorn app.main:app --reload --host 127.0.0.1 --port %BACKEND_PORT%"
+start "Boilerplate Frontend" cmd /k "cd /d "%ROOT%\frontend" && npm run dev -- --host 127.0.0.1 --port %FRONTEND_PORT%"
 
 echo Started frontend on port %FRONTEND_PORT% and backend on port %BACKEND_PORT%.
 endlocal
