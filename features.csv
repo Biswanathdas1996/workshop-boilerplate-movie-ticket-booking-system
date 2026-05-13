@@ -5,3 +5,8 @@ F006,Movie Search & Filter,Movies,High,Search by title, genre, language, rating,
 F007,Movie Detail Page,Movies,High,Show synopsis, cast, trailer, duration, language, and ratings
 F008,Movie Ratings & Reviews,Movies,Medium,Let users rate and write reviews for watched movies,,,,,
 F016,Booking Flow (Step-by-Step),Booking,High,Guided flow: select movie -> date -> show -> seats -> confirm,,,,,
+KAN-481,Mobile OTP Login,Authentication,High,"Replace email/password with mobile number + OTP authentication for secure user registration and login",,,,,
+KAN-444,Movie Search & Filter,Movies,High,"Advanced search and filter for movies by title, genre, language, rating, and release date with real-time results",,,,,
+KAN-482,Food Ordering,Food & Beverage,High,"In-app food menu with cart functionality allowing users to order snacks and beverages during booking",,,,,
+KAN-483,Dynamic Pricing,Pricing,High,"Automatic seat price adjustment based on real-time availability and occupancy rates to optimize revenue",,,,,
+KAN-484,Theatre 360 View,Theatre Experience,Medium,"Interactive 360-degree theatre view with metadata and hotspots for immersive venue exploration",,,,,
